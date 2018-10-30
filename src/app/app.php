@@ -25,7 +25,6 @@ class App {
 
         while (self::$signal) {
             sleep(60 * Conf::getInt('update.interval.minutes', 20));
-
             Job::checkAndModifyNotes();
         }
     }

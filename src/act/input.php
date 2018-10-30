@@ -132,7 +132,36 @@ class ActInput {
     public static function downloadBinary(string $src) {
         Log::debug("Download image [%s]", $src);
 
-        $opts = [
+        if (strpos($src, '.media.tumblr.com/') !== false && strpos($src, '500.') !== false) {
+            $context = stream_context_create([
+                "http" => [
+                    "method" => "HEAD",
+                    "header" => [
+                        'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                        'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.1',
+                    ]
+                ]
+            ]);
+
+            $largeSrc = str_replace('500.', '1280.', $src);
+            $headers = get_headers($largeSrc, 0, $context);
+            if ($headers && isset($headers[0]) && strpos($headers[0], '200') !== false) {
+                Log::debug("Use larger source [%s]", $largeSrc);
+
+                $src = $largeSrc;
+            }
+        }
+
+        if (strpos($src, '.126.net') !== false || strpos($src, '.127.net') !== false) {
+            if (($idx = strpos($src, '?')) !== false) {
+                $largeSrc = substr($src, 0, $idx + 1) . 'type=jpg';
+                Log::debug("Use larger source [%s]", $largeSrc);
+
+                $src = $largeSrc;
+            }
+        }
+
+        $context = stream_context_create([
             "http" => [
                 "method" => "GET",
                 "header" => [
@@ -140,9 +169,7 @@ class ActInput {
                     'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.1',
                 ]
             ]
-        ];
-
-        $context = stream_context_create($opts);
+        ]);
 
         return @file_get_contents($src, false, $context);
     }
