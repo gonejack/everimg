@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fdf9c1e1623d6e750eaed771fd4a2108",
+    "content-hash": "c18e2f901e2825f7c77a8a063c40d98a",
     "packages": [
         {
             "name": "evernote/evernote-cloud-sdk-php",
@@ -260,6 +260,8 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-json": "*"
+    },
     "platform-dev": []
 }

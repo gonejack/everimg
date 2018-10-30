@@ -6,9 +6,33 @@
  * Time: 8:11 PM
  */
 
-namespace job;
 
+class Job {
+    public static function init() {
+        ActInput::init();
+        ActModify::init();
+        ActOutput::init();
+    }
 
-class ModifyImages {
+    public static function checkAndModifyNotes() {
+        Log::info("Start [%s]", __FUNCTION__);
 
+        $metas = ActInput::getUpdatedNoteMetas();
+
+        foreach ($metas as $meta) {
+            $note = ActInput::getNoteFromMeta($meta);
+            if (is_null($note)) {
+                continue;
+            }
+
+            $modNote = ActModify::modifyNoteImages($note);
+            if (is_null($modNote)) {
+                continue;
+            }
+
+            ActOutput::uploadModifiedNote($modNote);
+        }
+
+        Log::info("End [%s]", __FUNCTION__);
+    }
 }

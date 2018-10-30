@@ -1,10 +1,10 @@
-<phpunit
-        colors="true"
->
-
-<filter>
-    <whitelist>
-        <!--<directory suffix=".php">../src</directory>-->
-    </whitelist>
-</filter>
+<phpunit colors="true">
+    <testsuite name='main'>
+        <directory suffix='.php'>test</directory>
+    </testsuite>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
 </phpunit>

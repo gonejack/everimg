@@ -6,7 +6,7 @@
  * Time: 3:35 PM
  */
 
-class LogManager implements ServiceInterface {
+class LoggerManager implements ServiceInterface {
     private static $container = [];
     private static $stdout;
     private static $stderr;

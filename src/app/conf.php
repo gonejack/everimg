@@ -6,41 +6,53 @@
  * Time: 3:35 PM
  */
 
+declare(strict_types=1);
+
+class ENV_DEFAULT {
+    static $CONF_FILE = './conf/release.ini';
+}
+
 class Conf {
     private static $conf;
 
-    public static function load() {
-        Conf::$conf = json_decode(self::getEnv('CONF_FILE', Preset::$CONF_FILE), true);
+    public static function init() {
+        $file = self::getEnv('CONF_FILE', ENV_DEFAULT::$CONF_FILE);
+
+        if (file_exists($file)) {
+            Conf::$conf = parse_ini_file($file);
+        }
+        else {
+            Log::fatal("Config file [%s] not exist", $file);
+        }
     }
 
-    /**
-     * @param $key
-     * @param $def
-     * @return mixed
-     */
-    public static function get($key, $def=null) {
-        $val = self::$conf[$key];
+    public static function get(string $key, $def=null) {
+        $val = @self::$conf[$key];
 
-        return is_null($val) ? $def : $val;
+        return isset($val) ? $val : $def;
     }
-
-    /**
-     * @param $key
-     * @return mixed
-     * @throws ConfNotFoundException
-     */
-    public static function mustGet($key) {
+    public static function mustGet(string $key) {
         $val = self::get($key);
 
         if (is_null($val)) {
-            throw new ConfNotFoundException($key);
+            Log::fatal("Required config [$key] not exist");
         }
 
         return $val;
     }
 
-    public static function getEnv($key, $def) {
-        return getenv($key, true) ?: $def;
+    public static function getBool(String $key, bool $def):bool {
+        return boolval(self::get($key, $def));
+    }
+    public static function getInt(String $key, int $def):int {
+        return intval(self::get($key, $def));
+    }
+    public static function getEnv(string $key, $def) {
+        $val = getenv($key, true) ?: $def;
+
+        Log::info("Read env %s => %s", $key, var_export($val, true));
+
+        return $val;
     }
 }
 
@@ -49,8 +61,3 @@ class ConfNotFoundException extends Exception {
         return __CLASS__ . ": [{$this->code}] Config has no key [{$this->message}]\n";
     }
 }
-
-class Preset {
-    static $CONF_FILE = './conf/dev.json';
-}
-

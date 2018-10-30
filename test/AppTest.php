@@ -6,7 +6,12 @@
  * Time: 3:28 AM
  */
 
+require "autoload.php";
 
-class AppTest extends PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
 
+class AppTest extends TestCase {
+    public function testStart() {
+        $this->assertEquals(1, 1);
+    }
 }

@@ -1,0 +1,5 @@
+# Execution management
+Supervisor is recommend for execution management, have a look at supervisor.ini.
+
+# if using web server
+Don't leak your *.phar files through browser downloads.

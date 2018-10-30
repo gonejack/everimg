@@ -29,37 +29,6 @@ class ClientManager implements ServiceInterface {
     public static function init(): bool {
         static::buildClient();
 
-        $clt = self::get();
-        $note = new \Evernote\Model\Note();
-        $note->setTitle("abc");
-        $note->setContent(new \Evernote\Model\PlainTextNoteContent("this is content"));
-        $note->setTagNames(['abc', 'qqzone']);
-        $clt->uploadNote($note, null);
-
-        $noteStore = $clt->getUserNotestore();
-        $syncState = $noteStore->getSyncState(static::$token);
-
-        $syncState->updateCount;
-        $noteFilter = new \EDAM\NoteStore\NoteFilter();
-        $noteMetaResultSpec = new \EDAM\NoteStore\NotesMetadataResultSpec([
-            'includeTitle' => true,
-            'includeContentLength' => true,
-            'includeCreated' => true,
-            'includeUpdated' => true,
-            'includeDeleted' => true,
-            'includeUpdateSequenceNum' => true,
-            'includeNotebookGuid' => true,
-            'includeTagGuids' => true,
-            'includeAttributes' => true,
-            'includeLargestResourceMime' => true,
-            'includeLargestResourceSize' => true,
-        ]);
-        $newNotes = $noteStore->findNotesMetadata(static::$token, $noteFilter, 0, 100, $noteMetaResultSpec);
-
-        foreach ($newNotes as $note) {
-            var_dump($note);
-        }
-
         return true;
     }
 }
