@@ -1,0 +1,15 @@
+[app]
+consumer.key = igonejack
+consumer.secret = 77ae6c314ad77724
+update.interval.minutes = 1
+
+[client]
+client.notestore = https://sandbox.evernote.com/shard/s1/notestore
+client.token = "S=s1:U=94fa9:E=16e0b74acc8:C=166b3c38050:P=1cd:A=en-devtoken:V=2:H=19a401685d1eb6f1263663bb6d560e3e"
+client.sandbox = true
+client.china = false
+
+[deploy]
+deploy.file.last_update_count = ./var/last_update_count.info
+deploy.file.last_update_time = ./var/last_update_time.info
+deploy.dir.images = ./var/images

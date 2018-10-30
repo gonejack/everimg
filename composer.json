@@ -1,0 +1,9 @@
+{
+    "autoload": {
+        "classmap": ["src/"]
+    },
+    "require": {
+        "ext-json": "*",
+        "evernote/evernote-cloud-sdk-php": "dev-master"
+    }
+}
