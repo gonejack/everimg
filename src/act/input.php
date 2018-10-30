@@ -97,7 +97,7 @@ class ActInput {
 
         return $metas;
     }
-    public static function getNoteFromMeta(NoteMetadata $meta):Note {
+    public static function getNoteFromMeta(NoteMetadata $meta):?Note {
         try {
             return ClientManager::get()->getNote($meta->guid);
         }
@@ -107,7 +107,7 @@ class ActInput {
             return null;
         }
     }
-    public static function getMediaResource(string $src):Resource {
+    public static function getMediaResource(string $src):?Resource {
         $resource = null;
 
         if ($binary = static::downloadBinary($src)) {

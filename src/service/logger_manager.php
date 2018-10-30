@@ -6,6 +6,8 @@
  * Time: 3:35 PM
  */
 
+declare(strict_types=1);
+
 class LoggerManager implements ServiceInterface {
     private static $container = [];
     private static $stdout;
@@ -15,13 +17,6 @@ class LoggerManager implements ServiceInterface {
 
     }
 
-    public static function get($name) {
-        if (!isset(self::$container[$name])) {
-            self::$container[$name] = new Logger($name, self::$stdout, self::$stderr);
-        }
-
-        return self::$container[$name];
-    }
     public static function init():bool {
         if (Conf::getEnv("LOG_TO_FILE", false)) {
             static::redirect();
@@ -34,6 +29,13 @@ class LoggerManager implements ServiceInterface {
         static::$container = [];
 
         return true;
+    }
+    public static function get($name) {
+        if (!isset(self::$container[$name])) {
+            self::$container[$name] = new Logger($name, self::$stdout, self::$stderr);
+        }
+
+        return self::$container[$name];
     }
 }
 

@@ -1,3 +1,9 @@
+# compile
+./composer.phar dump-autoload
+
+# run
+php index.php
+
 # package
 php -d phar.readonly=off ./phar-composer.phar build . ./bin/everimg.phar
 

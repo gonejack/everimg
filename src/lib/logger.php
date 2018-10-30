@@ -6,6 +6,8 @@
  * Time: 12:38 PM
  */
 
+declare(strict_types=1);
+
 class Logger {
     private $name;
     private $out;

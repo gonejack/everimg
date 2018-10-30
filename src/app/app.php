@@ -6,11 +6,12 @@
  * Time: 3:30 PM
  */
 
+declare(strict_types=1);
 declare(ticks = 1);
 
 class App {
     private static $signal = true;
-    
+
     private static function init() {
         Conf::init();
         Log::init();
@@ -23,9 +24,9 @@ class App {
         Log::info("Working");
 
         while (self::$signal) {
-            Job::checkAndModifyNotes();
-
             sleep(60 * Conf::getInt('update.interval.minutes', 20));
+
+            Job::checkAndModifyNotes();
         }
     }
 

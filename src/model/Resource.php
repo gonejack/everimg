@@ -6,6 +6,8 @@
  * Time: 4:58 PM
  */
 
+declare(strict_types=1);
+
 class Resource extends \Evernote\Model\Resource {
     public function getEnmlImageTag(array $attrs) {
         $tag = '<en-media %s />';

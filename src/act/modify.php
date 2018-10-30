@@ -6,6 +6,8 @@
  * Time: 5:18 AM
  */
 
+declare(strict_types=1);
+
 use \Evernote\Model\Note;
 
 class ActModify {
@@ -43,7 +45,7 @@ class ActModify {
     public static function init() {
         static::$pattern = '#<img [^<>]*?src="[^"]+"[^<>]*?>([^<>]*?</img>)?#';
     }
-    public static function modifyNoteImages(Note $note):Note {
+    public static function modifyNoteImages(Note $note):?Note {
         $noteTitle = $note->getTitle();
         $noteContent = $note->getContent()->toEnml();
         $htmlParser = new DOMDocument();
@@ -68,7 +70,7 @@ class ActModify {
 
                 $src = $imgAttrs['src'];
                 if (empty($src)) { // invalid media source
-                    Log::error("Empty src of img [%s]", $imgHTMLTag);
+                    Log::error("Empty src of img [%s] from note [%s]", $imgHTMLTag, $noteTitle);
                 }
                 elseif (strpos($src, 'data') === 0) { // base64 image
                     Log::debug("Skip base64 image");
@@ -77,7 +79,9 @@ class ActModify {
                     $resource = ActInput::getMediaResource($src);
 
                     if (is_null($resource)) { // failed building resource
-                        Log::error("Error build resource [%s], skip note", $src);
+                        Log::error("Error build resource [%s], skip note [%s]", $src, $noteTitle);
+
+                        return null;
                     }
                     else {
                         $note->addResource($resource);

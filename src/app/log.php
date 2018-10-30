@@ -6,6 +6,8 @@
  * Time: 12:44 PM
  */
 
+declare(strict_types=1);
+
 class Log {
     private static $allows = ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'];
 

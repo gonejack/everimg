@@ -6,6 +6,8 @@
  * Time: 12:24 AM
  */
 
+declare(strict_types=1);
+
 use \Evernote\Model\Note;
 use \EDAM\Error\EDAMUserException;
 

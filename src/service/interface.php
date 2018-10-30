@@ -6,6 +6,8 @@
  * Time: 4:28 PM
  */
 
+declare(strict_types=1);
+
 interface ServiceInterface {
     public static function init(): bool;
 }
