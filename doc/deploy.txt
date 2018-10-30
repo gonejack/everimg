@@ -1,5 +1,0 @@
-# management
-Supervisor is recommend for managing executions, have a look on supervisor.ini.
-
-# when using web server
-Don't leak your *.phar files through browser downloads.
