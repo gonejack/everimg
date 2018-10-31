@@ -5,8 +5,9 @@
  * Date: 2018/10/27
  * Time: 12:31 PM
  */
-
 declare(strict_types=1);
+
+use Evernote\Client;
 
 class ClientManager implements ServiceInterface {
     private static $token;
@@ -19,10 +20,10 @@ class ClientManager implements ServiceInterface {
         static::$sandbox = Conf::getBool('client.sandbox', true);
         static::$china = Conf::getBool('client.china', false);
 
-        static::$client = new Evernote\Client(static:: $token, static:: $sandbox, null, null, static:: $china);
+        static::$client = new Client(static:: $token, static:: $sandbox, null, null, static:: $china);
     }
 
-    public static function get(): \Evernote\Client {
+    public static function get(): Client {
         return static::$client;
     }
 

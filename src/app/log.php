@@ -33,6 +33,11 @@ class Log {
             LoggerManager::get(self::getModName())->info($msg, ...$args);
         }
     }
+    public static function warn(string $msg, ...$args) {
+        if (static::check('ERROR')) {
+            LoggerManager::get(self::getModName())->warn($msg, ...$args);
+        }
+    }
     public static function error(string $msg, ...$args) {
         if (static::check('ERROR')) {
             LoggerManager::get(self::getModName())->error($msg, ...$args);

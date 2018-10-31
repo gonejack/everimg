@@ -8,24 +8,49 @@
 
 declare(strict_types=1);
 
-use \Evernote\Model\Note;
-use \EDAM\Error\EDAMUserException;
+use Evernote\Model\Note;
+use EDAM\Error\EDAMUserException;
+use Thrift\Exception\TTransportException;
 
 class ActOutput {
+    public static $networkErrorCodes = [
+        TTransportException::NOT_OPEN,
+        TTransportException::TIMED_OUT
+    ];
+
     public static function init() {
 
     }
     public static function uploadModifiedNote(Note $note) {
-        try {
-            ClientManager::get()->replaceNote($note, $note);
+        $tryTimes = 3;
 
-            Log::info("Replaced note [%s]", $note->getTitle());
+        while ($tryTimes-- > 0) {
+            try {
+                Log::debug("Upload note [%s]", $note->getTitle());
+
+                ClientManager::get()->replaceNote($note, $note);
+
+                Log::info("Uploaded note [%s]", $note->getTitle());
+
+                return;
+            }
+            catch (EDAMUserException $e) {
+                Log::error("Error replacing note [%s, %s] %s", $e->errorCode, $e->parameter, $note->getTitle());
+
+                return;
+            }
+            catch (Exception $e) {
+                Log::error("%s", $e->getMessage());
+
+                if (in_array($e->getCode(), static::$networkErrorCodes)) {
+                    Log::error("Upload network failure, retrying");
+                }
+                else {
+                    return;
+                }
+            }
         }
-        catch (EDAMUserException $e) {
-            Log::error("Error replacing note [%s, %s] %s", $e->errorCode, $e->parameter, $note->getTitle());
-        }
-        catch (Exception $e) {
-            Log::error("%s", $e->getMessage());
-        }
+
+        Log::error("Upload failed with note [%s]", $note->getTitle());
     }
 }

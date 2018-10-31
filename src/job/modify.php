@@ -36,7 +36,7 @@ class Job {
             }
         }
         catch (Exception $e) {
-            Log::error("Error from %s: %s", __FUNCTION__, $e);
+            Log::error("Error from [%s]: %s", __FUNCTION__, $e);
         }
 
         Log::info("End [%s]", __FUNCTION__);

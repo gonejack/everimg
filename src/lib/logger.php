@@ -32,6 +32,9 @@ class Logger {
     public function info(string $msg, ...$args):void {
         fwrite($this->out, $this->format('INFO', $msg, ...$args));
     }
+    public function warn(string $msg, ...$args):void {
+        fwrite($this->err, $this->format('WARN', $msg, ...$args));
+    }
     public function error(string $msg, ...$args):void {
         fwrite($this->err, $this->format('ERROR', $msg, ...$args));
     }

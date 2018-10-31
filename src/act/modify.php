@@ -8,7 +8,8 @@
 
 declare(strict_types=1);
 
-use \Evernote\Model\Note;
+use Evernote\Model\Note;
+use Evernote\Model\EnmlNoteContent;
 
 class ActModify {
     private static $pattern;
@@ -54,7 +55,7 @@ class ActModify {
 
         // match images
         if (preg_match_all(static::$pattern, $noteContent, $imgHTMLTags) < 1) {
-            Log::debug("No images found from [%s], skip note", $noteTitle);
+            Log::debug("Skip note [%s], no images found", $noteTitle);
 
             return null;
         }
@@ -70,16 +71,16 @@ class ActModify {
 
                 $src = $imgAttrs['src'];
                 if (empty($src)) { // invalid media source
-                    Log::error("Empty src of img [%s] from note [%s]", $imgHTMLTag, $noteTitle);
+                    Log::error("Skip image from note [%s], empty src of img [%s] ", $noteTitle, $imgHTMLTag);
                 }
                 elseif (strpos($src, 'data') === 0) { // base64 image
-                    Log::debug("Skip base64 image");
+                    Log::debug("Skip image from note [%s], base64 image", $noteTitle);
                 }
                 else {
                     $resource = ActInput::getMediaResource($src);
 
                     if (is_null($resource)) { // failed building resource
-                        Log::error("Error build resource [%s], skip note [%s]", $src, $noteTitle);
+                        Log::error("Skip note [%s], can not build resource [%s]", $noteTitle, $src);
 
                         return null;
                     }
@@ -94,7 +95,7 @@ class ActModify {
             }
         }
 
-        $note->setContent(new \Evernote\Model\EnmlNoteContent($noteContent));
+        $note->setContent(new EnmlNoteContent($noteContent));
 
         return $note;
     }

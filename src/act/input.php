@@ -8,8 +8,12 @@
 
 declare(strict_types=1);
 
-use \EDAM\NoteStore\NoteMetadata;
-use \Evernote\Model\Note;
+use Evernote\File\File;
+use Evernote\Model\Note;
+use EDAM\NoteStore\NoteMetadata;
+use EDAM\Types\NoteSortOrder;
+use EDAM\NoteStore\NoteFilter;
+use EDAM\NoteStore\NotesMetadataResultSpec;
 
 class ActInput {
     public static $lastUpdateCountFile;
@@ -35,11 +39,10 @@ class ActInput {
         self::$lastUpdateCountFile = Conf::get('deploy.file.last_update_count', './var/last_update_count');
         self::$lastUpdateTimeFile = Conf::get('deploy.file.last_update_time', './var/last_update_time');
 
-        self::$noteFilter = $noteFilter = new \EDAM\NoteStore\NoteFilter([
-            'order' => \EDAM\Types\NoteSortOrder::UPDATED,
+        self::$noteFilter = new NoteFilter([
+            'order' => NoteSortOrder::UPDATED,
         ]);
-
-        self::$noteMetaSpec = new \EDAM\NoteStore\NotesMetadataResultSpec([
+        self::$noteMetaSpec = new NotesMetadataResultSpec([
             'includeTitle' => true,
 //            'includeCreated' => true,
             'includeUpdated' => true,
@@ -89,20 +92,26 @@ class ActInput {
                 }
             }
 
-            Log::info("Fetched %s notes", count($metas));
+            Log::info("Fetched %s note metas", count($metas));
         }
         catch (Exception $e) {
-            Log::error("Check update notes error: %s", $e);
+            Log::error("Check updated note metas error: %s", $e);
         }
 
         return $metas;
     }
     public static function getNoteFromMeta(NoteMetadata $meta):?Note {
         try {
-            return ClientManager::get()->getNote($meta->guid);
+            Log::debug("Fetch note [%s]", $meta->title);
+
+            $note =  ClientManager::get()->getNote($meta->guid);
+
+            Log::info("Fetched note [%s]", $meta->title);
+
+            return $note;
         }
         catch (Exception $e) {
-            Log::error("Fetch Note [%s] error: %s", $meta->title, $e);
+            Log::error("Fetch note [%s] error: %s", $meta->title, $e);
 
             return null;
         }
@@ -110,11 +119,11 @@ class ActInput {
     public static function getMediaResource(string $src):?Resource {
         $resource = null;
 
-        if ($binary = static::downloadBinary($src)) {
+        if ($content = Kit::downloadImageBinary($src)) {
             $tmp = tempnam(sys_get_temp_dir(), 'everimg-');
 
-            if (fwrite(fopen($tmp, 'w'), $binary)) {
-                $eFile = new \Evernote\File\File($tmp);
+            if (fwrite(fopen($tmp, 'w'), $content)) {
+                $eFile = new File($tmp);
                 $resource = new Resource($eFile);
             }
             else {
@@ -128,49 +137,5 @@ class ActInput {
         }
 
         return $resource;
-    }
-    public static function downloadBinary(string $src) {
-        Log::debug("Download image [%s]", $src);
-
-        if (strpos($src, '.media.tumblr.com/') !== false && strpos($src, '500.') !== false) {
-            $context = stream_context_create([
-                "http" => [
-                    "method" => "HEAD",
-                    "header" => [
-                        'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                        'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.1',
-                    ]
-                ]
-            ]);
-
-            $largeSrc = str_replace('500.', '1280.', $src);
-            $headers = get_headers($largeSrc, 0, $context);
-            if ($headers && isset($headers[0]) && strpos($headers[0], '200') !== false) {
-                Log::debug("Use larger source [%s]", $largeSrc);
-
-                $src = $largeSrc;
-            }
-        }
-
-        if (strpos($src, '.126.net') !== false || strpos($src, '.127.net') !== false) {
-            if (($idx = strpos($src, '?')) !== false) {
-                $largeSrc = substr($src, 0, $idx + 1) . 'type=jpg';
-                Log::debug("Use larger source [%s]", $largeSrc);
-
-                $src = $largeSrc;
-            }
-        }
-
-        $context = stream_context_create([
-            "http" => [
-                "method" => "GET",
-                "header" => [
-                    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-                    'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.1',
-                ]
-            ]
-        ]);
-
-        return @file_get_contents($src, false, $context);
     }
 }

@@ -15,12 +15,10 @@ class Resource extends \Evernote\Model\Resource {
         $attrs['type'] = $this->mime;
         $attrs['hash'] = $this->hash;
 
-        if (!isset($attrs['width']) && !is_null($this->file->getWidth())) {
-            $attrs['width'] = $this->file->getWidth();
-        }
+        if (!isset($attrs['width']) || $attrs['width'] > 650) {
+            $attrs['width'] = 650;
 
-        if (!isset($attrs['height']) && !is_null($this->file->getHeight())) {
-            $attrs['height'] = $this->file->getHeight();
+            unset($attrs['height']);
         }
 
         unset($attrs['src']);
