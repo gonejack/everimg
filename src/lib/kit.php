@@ -7,10 +7,10 @@
  */
 
 class Kit {
-    public static function parseHeaders(array $headerStrings, $headerName = null) {
+    public static function parseHeaders(?array $headerStrings, $headerName = null) {
         $headers = [];
 
-        if ($headerStrings) {
+        if (!empty($headerStrings)) {
             // http code
             if (strpos($headerStrings[0], 'HTTP') !== false) {
                 list(, $headers['status'], $headers['status_text']) = explode(' ', $headerStrings[0]);
@@ -100,6 +100,8 @@ class Kit {
                 return substr($src, 0, $idx + 1) . 'type=jpg';
             }
         }
+
+        $src = str_replace(' ', '', $src);
 
         return $src;
     }
