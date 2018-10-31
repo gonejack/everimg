@@ -95,7 +95,7 @@ class ActInput {
             Log::info("Fetched %s note metas", count($metas));
         }
         catch (Exception $e) {
-            Log::error("Check updated note metas error: %s", $e);
+            Log::error("Check updated note metas error: %s", $e->getMessage());
         }
 
         return $metas;
