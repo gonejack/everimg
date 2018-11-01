@@ -95,6 +95,7 @@ class ActModify {
             }
         }
 
+        $note->setTitle(html_entity_decode($note->getTitle()));
         $note->setContent(new EnmlNoteContent($noteContent));
 
         return $note;

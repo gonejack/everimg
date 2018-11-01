@@ -32,7 +32,7 @@ class ActInput {
         return intval(@file_get_contents(self::$lastUpdateTimeFile)) ?: intval(time() * 1e3);
     }
     private static function saveLastUpdateTime($now) {
-        return file_put_contents(self::$lastUpdateTimeFile, strval(intval($now)));
+        return file_put_contents(self::$lastUpdateTimeFile, strval($now));
     }
 
     public static function init() {
