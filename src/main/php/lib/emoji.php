@@ -12,7 +12,7 @@ class Emoji {
     private static $sina = [];
 
     public static function getSinaBase64Emoji(string $macro):?string {
-        if (empty($sina)) {
+        if (empty(static::$sina)) {
             $json = Conf::getResourceContent("sina_emojis.json");
 
             if ($json) {
