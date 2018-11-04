@@ -57,8 +57,7 @@ class ActModify {
         Log::info("Modifying [%s]", $noteTitle);
 
         // modify title
-        $newTitle = str_replace('[图片]', '', $noteTitle);
-        if ($newTitle && $newTitle !== $noteTitle) {
+        if (($newTitle = str_replace('[图片]', '', $noteTitle)) !== $noteTitle) {
             $note->setTitle(html_entity_decode($newTitle));
 
             Log::debug("Change title from [%s] => [%s]", $noteTitle, $newTitle);
@@ -67,12 +66,12 @@ class ActModify {
         }
 
         // modify images
-        if (preg_match_all(static::$imagePattern, $noteContent, $imgHTMLTags) < 1) {
+        if (preg_match_all(static::$imagePattern, $noteContent, $imgHTMLs) < 1) {
             Log::debug("Skip images modification of note [%s], no images found", $noteTitle);
         }
         else {
-            foreach ($imgHTMLTags[0] as $imgHTMLTag) {
-                $fixedTag = str_replace('</img>', '', $imgHTMLTag);
+            foreach ($imgHTMLs[0] as $imgHTML) {
+                $fixedTag = str_replace('</img>', '', $imgHTML);
                 $fixedTag = mb_convert_encoding($fixedTag, 'HTML-ENTITIES', 'UTF-8');
                 $htmlParser->loadHTML($fixedTag);
 
@@ -81,7 +80,7 @@ class ActModify {
 
                     $src = $imgAttrs['src'];
                     if (empty($src)) { // invalid media source
-                        Log::error("Skip image from note [%s], empty src of img [%s] ", $noteTitle, $imgHTMLTag);
+                        Log::error("Skip image from note [%s], empty src of img [%s] ", $noteTitle, $imgHTML);
                     }
                     elseif (strpos($src, 'data') === 0) { // base64 image
                         Log::debug("Skip image from note [%s], base64 image", $noteTitle);
@@ -95,7 +94,7 @@ class ActModify {
                         else {
                             $note->addResource($resource);
                             $imgMediaTag = $resource->getEnmlImageTag($imgAttrs);
-                            $noteContent = str_replace($imgHTMLTag, $imgMediaTag, $noteContent);
+                            $noteContent = str_replace($imgHTML, $imgMediaTag, $noteContent);
 
                             Log::info("Add resource [%s]", $src);
 

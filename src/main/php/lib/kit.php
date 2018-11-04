@@ -106,6 +106,9 @@ class Kit {
         return $src;
     }
     public static function getEmojiHTML($macro, $src):string {
+        $macro = str_replace('[', '', $macro);
+        $macro = str_replace(']', '', $macro);
+
         return "<img src=\"$src\" alt=\"$macro\" />";
     }
 }
