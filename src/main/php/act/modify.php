@@ -46,7 +46,7 @@ class ActModify {
 
     public static function init() {
         static::$imagePattern = '#<img [^<>]*?src="[^"]+"[^<>]*?>([^<>]*?</img>)?#';
-        static::$emojiPattern = '#\\[.+?\\]#';
+        static::$emojiPattern = '#\\[[^<>]+?\\]#';
     }
     public static function modifyNoteImages(Note $note):?Note {
         $noteTitle = $note->getTitle();
@@ -57,7 +57,8 @@ class ActModify {
         Log::info("Modifying [%s]", $noteTitle);
 
         // modify title
-        if ($newTitle = str_replace('[图片]', '', $noteTitle) !== $noteTitle) {
+        $newTitle = str_replace('[图片]', '', $noteTitle);
+        if ($newTitle && $newTitle !== $noteTitle) {
             $note->setTitle(html_entity_decode($newTitle));
 
             Log::debug("Change title from [%s] => [%s]", $noteTitle, $newTitle);
