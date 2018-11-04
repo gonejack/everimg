@@ -58,7 +58,7 @@ class ActModify {
 
         // modify title
         if (($newTitle = str_replace('[图片]', '', $noteTitle)) !== $noteTitle) {
-            $note->setTitle(html_entity_decode($newTitle));
+            $note->setTitle(trim(html_entity_decode($newTitle)));
 
             Log::debug("Change title from [%s] => [%s]", $noteTitle, $newTitle);
 
