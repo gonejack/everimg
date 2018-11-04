@@ -93,7 +93,7 @@ env CONF_FILE=./conf/dev.ini ./bin/everimg.phar
 
 ##### Service management
 
-Supervisor is recommend for service management, take a look on ./doc/supervisor.ini.
+Supervisor is recommend for service management, take a look on ./deploy/supervisor.ini.
 
 
 
