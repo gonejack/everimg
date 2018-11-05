@@ -28,11 +28,11 @@ class ActInput {
     private static function saveLastUpdateCount(int $count) {
         return file_put_contents(self::$lastUpdateCountFile, strval($count));
     }
-    private static function getLastUpdateTime():int {
-        return intval(@file_get_contents(self::$lastUpdateTimeFile)) ?: intval(time() * 1e3);
+    private static function getLastUpdateTime(): float {
+        return floor(floatval(@file_get_contents(self::$lastUpdateTimeFile)) ?: time() * 1e3);
     }
-    private static function saveLastUpdateTime($now) {
-        return file_put_contents(self::$lastUpdateTimeFile, strval($now));
+    private static function saveLastUpdateTime(float $now) {
+        return file_put_contents(self::$lastUpdateTimeFile, strval(floor($now)));
     }
 
     public static function init() {
