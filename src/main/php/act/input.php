@@ -104,7 +104,7 @@ class ActInput {
         try {
             Log::debug("Fetch note [%s]", $meta->title);
 
-            $note =  ClientManager::get()->getNote($meta->guid);
+            $note = ClientManager::get()->getNote($meta->guid);
 
             Log::info("Fetched note [%s]", $meta->title);
 
