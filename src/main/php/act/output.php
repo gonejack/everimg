@@ -26,24 +26,24 @@ class ActOutput {
 
         while ($tryTimes-- > 0) {
             try {
-                Log::debug("Upload note [%s]", $note->getTitle());
+                LogService::debug("Upload note [%s]", $note->getTitle());
 
-                ClientManager::get()->replaceNote($note, $note);
+                ClientService::get()->replaceNote($note, $note);
 
-                Log::info("Uploaded note [%s]", $note->getTitle());
+                LogService::info("Uploaded note [%s]", $note->getTitle());
 
                 return;
             }
             catch (EDAMUserException $e) {
-                Log::error("Error replacing note [%s, %s] %s", $e->errorCode, $e->parameter, $note->getTitle());
+                LogService::error("Error replacing note [%s, %s] %s", $e->errorCode, $e->parameter, $note->getTitle());
 
                 return;
             }
             catch (Exception $e) {
-                Log::error("%s", $e->getMessage());
+                LogService::error("%s", $e->getMessage());
 
                 if (in_array($e->getCode(), static::$networkErrorCodes)) {
-                    Log::error("Upload network failure, retrying");
+                    LogService::error("Upload network failure, retrying");
                 }
                 else {
                     return;
@@ -51,6 +51,6 @@ class ActOutput {
             }
         }
 
-        Log::error("Upload failed with note [%s]", $note->getTitle());
+        LogService::error("Upload failed with note [%s]", $note->getTitle());
     }
 }

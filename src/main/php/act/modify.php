@@ -54,20 +54,20 @@ class ActModify {
         $htmlParser = new DOMDocument();
         $changes = 0;
 
-        Log::info("Modifying [%s]", $noteTitle);
+        LogService::info("Modifying [%s]", $noteTitle);
 
         // modify title
         if (($newTitle = str_replace('[图片]', '', $noteTitle)) !== $noteTitle) {
             $note->setTitle(trim(html_entity_decode($newTitle)));
 
-            Log::debug("Change title from [%s] => [%s]", $noteTitle, $newTitle);
+            LogService::debug("Change title from [%s] => [%s]", $noteTitle, $newTitle);
 
             $changes += 1;
         }
 
         // modify images
         if (preg_match_all(static::$imagePattern, $noteContent, $imgHTMLs) < 1) {
-            Log::debug("Skip images modification of note [%s], no images found", $noteTitle);
+            LogService::debug("Skip images modification of note [%s], no images found", $noteTitle);
         }
         else {
             foreach ($imgHTMLs[0] as $imgHTML) {
@@ -80,23 +80,23 @@ class ActModify {
 
                     $src = $imgAttrs['src'];
                     if (empty($src)) { // invalid media source
-                        Log::error("Skip image from note [%s], empty src of img [%s] ", $noteTitle, $imgHTML);
+                        LogService::error("Skip image from note [%s], empty src of img [%s] ", $noteTitle, $imgHTML);
                     }
                     elseif (strpos($src, 'data') === 0) { // base64 image
-                        Log::debug("Skip image from note [%s], base64 image", $noteTitle);
+                        LogService::debug("Skip image from note [%s], base64 image", $noteTitle);
                     }
                     else {
                         $resource = ActInput::getMediaResource($src);
 
                         if (is_null($resource)) { // failed building resource
-                            Log::error("Skip note [%s], can not build resource [%s]", $noteTitle, $src);
+                            LogService::error("Skip note [%s], can not build resource [%s]", $noteTitle, $src);
                         }
                         else {
                             $note->addResource($resource);
                             $imgMediaTag = $resource->getEnmlImageTag($imgAttrs);
                             $noteContent = str_replace($imgHTML, $imgMediaTag, $noteContent);
 
-                            Log::info("Add resource [%s]", $src);
+                            LogService::info("Add resource [%s]", $src);
 
                             $changes += 1;
                         }
@@ -107,16 +107,19 @@ class ActModify {
 
         // modify emojis
         if (preg_match_all(static::$emojiPattern, $noteContent, $matches) < 1) {
-            Log::debug("Skip emojis modification of note [%s], no emoji found", $noteTitle);
+            LogService::debug("Skip emojis modification of note [%s], no emoji found", $noteTitle);
         }
         else {
             foreach ($matches[0] as $macro) {
                 if ($base64 = Emoji::getSinaBase64Emoji($macro)) {
                     $noteContent = str_replace($macro, Kit::getEmojiHTML($macro, $base64), $noteContent);
 
-                    Log::debug("Replace emoji %s", $macro);
+                    LogService::debug("Replace emoji %s", $macro);
 
                     $changes += 1;
+                }
+                else {
+                    LogService::warn("Emoji not found %s", $macro);
                 }
             }
         }

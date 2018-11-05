@@ -22,7 +22,7 @@ class Conf {
             Conf::$conf = parse_ini_file($file);
         }
         else {
-            Log::fatal("Config file [%s] not exist", $file);
+            LogService::fatal("Config file [%s] not exist", $file);
         }
     }
 
@@ -35,7 +35,7 @@ class Conf {
         $val = self::get($key);
 
         if (is_null($val)) {
-            Log::fatal("Required config [$key] not exist");
+            LogService::fatal("Required config [$key] not exist");
         }
 
         return $val;
@@ -50,7 +50,7 @@ class Conf {
     public static function getEnv(string $key, $def) {
         $val = getenv($key, true) ?: $def;
 
-        Log::info("Read env %s => %s", $key, var_export($val, true));
+        LogService::info("Read env %s => %s", $key, var_export($val, true));
 
         return $val;
     }

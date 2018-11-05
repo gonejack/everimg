@@ -34,13 +34,13 @@ class Kit {
         return $headers;
     }
     public static function downloadImageBinary(string $src) {
-        Log::debug("Download image [%s]", $src);
+        LogService::debug("Download image [%s]", $src);
 
         $better = self::getBetterSource($src);
         if ($better !== $src) {
             $src = $better;
 
-            Log::debug("Found better source [%s]", $better);
+            LogService::debug("Found better source [%s]", $better);
         }
 
         $context = stream_context_create([
@@ -63,13 +63,13 @@ class Kit {
                 return $binary;
             }
             else {
-                Log::warn("Retry download [%s]", $src);
+                LogService::warn("Retry download [%s]", $src);
 
                 sleep(10);
             }
         }
 
-        Log::error("Failed download [%s]", $src);
+        LogService::error("Failed download [%s]", $src);
 
         return null;
     }

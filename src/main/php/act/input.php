@@ -57,23 +57,23 @@ class ActInput {
         ]);
     }
     public static function getUpdatedNoteMetas():array {
-        Log::info("Checking update");
+        LogService::info("Checking update");
 
         $metas = [];
 
         try {
-            $client = ClientManager::get();
+            $client = ClientService::get();
             $noteStore = $client->getUserNotestore();
             $syncState = $noteStore->getSyncState($client->getToken());
 
             $lastUpdateCount = self::getLastUpdateCount();
             $lastUpdateTime = self::getLastUpdateTime();
 
-            Log::debug("SyncState updateCount: %s, lastUpdateCount: %s",
+            LogService::debug("SyncState updateCount: %s, lastUpdateCount: %s",
                 $syncState->updateCount,
                 $lastUpdateCount
             );
-            Log::debug("SyncState updateTime: %s, lastUpdateTime: %s",
+            LogService::debug("SyncState updateTime: %s, lastUpdateTime: %s",
                 date('Y-m-d H:i:s'),
                 date('Y-m-d H:i:s', intval($lastUpdateTime/1e3))
             );
@@ -85,33 +85,33 @@ class ActInput {
 
                 foreach ($metaData->notes as $meta) {
                     if ($meta->updated > $lastUpdateTime) {
-                        Log::info("Found [%s]", $meta->title);
+                        LogService::info("Found [%s]", $meta->title);
 
                         array_push($metas, $meta);
                     }
                 }
             }
 
-            Log::info("Fetched %s note metas", count($metas));
+            LogService::info("Fetched %s note metas", count($metas));
         }
         catch (Exception $e) {
-            Log::error("Check updated note metas error: %s", $e->getMessage());
+            LogService::error("Check updated note metas error: %s", $e->getMessage());
         }
 
         return $metas;
     }
     public static function getNoteFromMeta(NoteMetadata $meta):?Note {
         try {
-            Log::debug("Fetch note [%s]", $meta->title);
+            LogService::debug("Fetch note [%s]", $meta->title);
 
-            $note = ClientManager::get()->getNote($meta->guid);
+            $note = ClientService::get()->getNote($meta->guid);
 
-            Log::info("Fetched note [%s]", $meta->title);
+            LogService::info("Fetched note [%s]", $meta->title);
 
             return $note;
         }
         catch (Exception $e) {
-            Log::error("Fetch note [%s] error: %s", $meta->title, $e);
+            LogService::error("Fetch note [%s] error: %s", $meta->title, $e);
 
             return null;
         }
@@ -127,13 +127,13 @@ class ActInput {
                 $resource = new Resource($eFile);
             }
             else {
-                Log::error("Write disk error with file [%s]", $tmp);
+                LogService::error("Write disk error with file [%s]", $tmp);
             }
 
             unlink($tmp);
         }
         else {
-            Log::error("Download error with url [%s]", $src);
+            LogService::error("Download error with url [%s]", $src);
         }
 
         return $resource;

@@ -11,10 +11,3 @@ declare(strict_types=1);
 interface ServiceInterface {
     public static function init(): bool;
 }
-
-final class Srv {
-    public static function init() {
-        LoggerManager::init();
-        ClientManager::init();
-    }
-}

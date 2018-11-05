@@ -18,10 +18,10 @@ class Emoji {
             if ($json) {
                 static::$sina = json_decode($json, true);
 
-                Log::debug("Read sina_emojis.json");
+                LogService::debug("Read sina_emojis.json");
             }
             else {
-                Log::error("Error loading resource sina_emojis.json");
+                LogService::error("Error loading resource sina_emojis.json");
             }
         }
 

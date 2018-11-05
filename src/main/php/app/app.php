@@ -7,21 +7,23 @@
  */
 
 declare(strict_types=1);
-declare(ticks = 1);
+declare(ticks=1);
 
 class App {
     private static $signal = true;
 
     private static function init() {
         Conf::init();
-        Log::init();
-        Srv::init();
+
+        LogService::init();
+        ClientService::init();
+
         Job::init();
 
-        Log::info("Started");
+        LogService::info("Started");
     }
     private static function work() {
-        Log::info("Working");
+        LogService::info("Working");
 
         while (self::$signal) {
             sleep(60 * Conf::getInt('update.interval.minutes', 20));
