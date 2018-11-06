@@ -14,16 +14,14 @@ class App {
 
     private static function init() {
         Conf::init();
-
-        LogService::init();
-        ClientService::init();
-
+        Log::init();
+        Service::init();
         Job::init();
 
-        LogService::info("Started");
+        Log::info("Started");
     }
     private static function work() {
-        LogService::info("Working");
+        Log::info("Working");
 
         while (self::$signal) {
             sleep(60 * Conf::getInt('update.interval.minutes', 20));

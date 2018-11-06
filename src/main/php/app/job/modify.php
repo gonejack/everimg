@@ -16,7 +16,7 @@ class Job {
     }
 
     public static function checkAndModifyNotes() {
-        LogService::info("Start [%s]", __FUNCTION__);
+        Log::info("Start [%s]", __FUNCTION__);
 
         try {
             $metas = ActInput::getUpdatedNoteMetas();
@@ -27,7 +27,7 @@ class Job {
                     continue;
                 }
 
-                $modNote = ActModify::modifyNoteImages($note);
+                $modNote = ActModify::modifyNote($note);
                 if (is_null($modNote)) {
                     continue;
                 }
@@ -36,9 +36,9 @@ class Job {
             }
         }
         catch (Exception $e) {
-            LogService::error("Error from [%s]: %s", __FUNCTION__, $e);
+            Log::error("Error from [%s]: %s", __FUNCTION__, $e);
         }
 
-        LogService::info("End [%s]", __FUNCTION__);
+        Log::info("End [%s]", __FUNCTION__);
     }
 }

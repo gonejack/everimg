@@ -19,13 +19,6 @@ class Logger {
         $this->err = $err ?: STDERR;
     }
 
-    private function format(string $level, string $msg, ...$args):string {
-        $date = date("Y-m-d H:i:s");
-        $msg = sprintf($msg, ...$args);
-
-        return "[$date] $level - [$this->name] $msg\n";
-    }
-
     public function debug(string $msg, ...$args):void {
         fwrite($this->out, $this->format('DEBUG', $msg, ...$args));
     }
@@ -42,5 +35,12 @@ class Logger {
         fwrite($this->err, $this->format('FATAL', $msg, ...$args));
 
         exit(-1);
+    }
+
+    private function format(string $level, string $msg, ...$args):string {
+        $date = date("Y-m-d H:i:s");
+        $msg = sprintf($msg, ...$args);
+
+        return "[$date] $level - [$this->name] $msg\n";
     }
 }
