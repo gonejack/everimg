@@ -7,30 +7,30 @@
  */
 
 class Net {
-    public static function parseHeaders(?array $headerStrings, $headerName = null) {
-        $headers = [];
+    public static function parseHeaders(?array $originHeaders, $headerName = null) {
+        $parsedHeaders = [];
 
-        if (!empty($headerStrings)) {
+        if (!empty($originHeaders)) {
             // http code
-            if (strpos($headerStrings[0], 'HTTP') !== false) {
-                list(, $headers['status'], $headers['status_text']) = explode(' ', $headerStrings[0]);
-                unset($headerStrings[0]);
+            if (strpos($originHeaders[0], 'HTTP') !== false) {
+                list(, $parsedHeaders['status'], $parsedHeaders['status_text']) = explode(' ', $originHeaders[0]);
+                unset($originHeaders[0]);
             }
 
             // others
-            foreach ($headerStrings as $value) {
-                $header = preg_split('/:\s*/', $value);
-
-                $headers[strtolower($header[0])] = $header[1];
+            foreach ($originHeaders as $value) {
+                if ($header = preg_split('/:\s*/', $value)) {
+                    $parsedHeaders[strtolower(@$header[0])] = @$header[1];
+                }
             }
 
             // get interests
             if (!is_null($headerName)) {
                 $headerName = strtolower($headerName);
-                return isset($headers[$headerName]) ? $headers[$headerName] : null;
+                return isset($parsedHeaders[$headerName]) ? $parsedHeaders[$headerName] : null;
             }
         }
 
-        return $headers;
+        return $parsedHeaders;
     }
 }
