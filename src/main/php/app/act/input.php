@@ -224,6 +224,11 @@ class ActInput {
             }
         }
 
+        // weico
+        if (preg_match('#^https?:/\w#', $src)) {
+            $src = str_replace(':/', '://', $src);
+        }
+
         $src = str_replace(' ', '', $src);
 
         return $src;

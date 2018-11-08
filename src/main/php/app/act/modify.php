@@ -46,7 +46,7 @@ class ActModify {
 
     public static function init() {
         static::$imagePattern = '#<img [^<>]*?src="[^"]+"[^<>]*?>([^<>]*?</img>)?#';
-        static::$emojiPattern = '#\\[[^<>]+?\\]#';
+        static::$emojiPattern = '#\[[^<>]+?\]#';
     }
 
     public static function modifyNote(Note $note):?Note {
