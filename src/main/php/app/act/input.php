@@ -178,7 +178,7 @@ class ActInput {
 
         $tryTimes = 3;
         while ($tryTimes-- > 0) {
-            $binary = @file_get_contents($src, false, $context);;
+            $binary = @file_get_contents($src, false, $context) ?: "";
             $expectLen = intval(Net::parseHeaders(@$http_response_header, 'content-length'));
             $realLen = strlen($binary);
 
