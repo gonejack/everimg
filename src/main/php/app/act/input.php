@@ -224,9 +224,12 @@ class ActInput {
             }
         }
 
-        // weico
+        // weibo
         if (preg_match('#^https?:/\w#', $src)) {
             $src = str_replace(':/', '://', $src);
+        }
+        if (strpos($src, 'sinaimg.cn/woriginal') !== false) {
+            $src = str_replace('sinaimg.cn/woriginal', 'sinaimg.cn/large', $src);
         }
 
         $src = str_replace(' ', '', $src);
