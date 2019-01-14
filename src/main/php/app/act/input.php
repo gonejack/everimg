@@ -232,6 +232,11 @@ class ActInput {
             $src = str_replace('sinaimg.cn/woriginal', 'sinaimg.cn/large', $src);
         }
 
+        // tuchong
+        if (strpos($src, 'photo.tuchong.com') != false) {
+            $src = str_replace('/l/', '/f/', $src);
+        }
+
         $src = str_replace(' ', '', $src);
 
         return $src;
