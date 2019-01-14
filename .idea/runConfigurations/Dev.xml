@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Dev" type="PhpLocalRunConfigurationType" factoryName="PHP Console" singleton="true" path="$PROJECT_DIR$/index.php">
+    <CommandLine workingDirectory="$PROJECT_DIR$">
+      <envs>
+        <env name="CONF_FILE" value="./conf/dev.ini" />
+        <env name="LOG_LEVEL" value="debug" />
+      </envs>
+    </CommandLine>
+    <method v="2" />
+  </configuration>
+</component>
