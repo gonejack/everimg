@@ -15,7 +15,7 @@ class ActModify {
     private static $imagePattern;
     private static $emojiPattern;
 
-    private static function parseImageAttrs(DOMElement $img) {
+    private static function parseImageAttrs(DOMElement $img): Array {
         $keys = [
             'src',
             'align',

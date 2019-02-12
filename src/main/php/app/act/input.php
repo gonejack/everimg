@@ -119,8 +119,14 @@ class ActInput {
             $tmp = tempnam(sys_get_temp_dir(), 'everimg-');
 
             if (fwrite(fopen($tmp, 'w'), $content)) {
-                $eFile = new File($tmp);
-                $resource = new Resource($eFile);
+                $size = @getimagesize($tmp);
+                if ($size) {
+                    $eFile = new File($tmp, $size['mime'], $size[0], $size[1]);
+                    $resource = new Resource($eFile);
+                }
+                else {
+                    Log::error("$tmp is not valid image file");
+                }
             }
             else {
                 Log::error("Write disk error with file [%s]", $tmp);

@@ -19,7 +19,6 @@ class ClientService implements ServiceInterface {
         static::$token = Conf::mustGet('client.token');
         static::$sandbox = Conf::getBool('client.sandbox', true);
         static::$china = Conf::getBool('client.china', false);
-
         static::$client = new Client(static:: $token, static:: $sandbox, null, null, static:: $china);
     }
 
