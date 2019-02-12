@@ -231,6 +231,9 @@ class ActInput {
         }
 
         // weibo
+        if (substr($src, 0, 2) === '//') {
+            $src = "http:$src";
+        }
         if (preg_match('#^https?:/\w#', $src)) {
             $src = str_replace(':/', '://', $src);
         }
