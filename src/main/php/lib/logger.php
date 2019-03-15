@@ -13,7 +13,7 @@ class Logger {
     private $out;
     private $err;
 
-    public function __construct($name, $out, $err) {
+    public function __construct(string $name, $out = null, $err = null) {
         $this->name = $name;
         $this->out = $out ?: STDOUT;
         $this->err = $err ?: STDERR;

@@ -12,9 +12,9 @@ class Log {
     private static $allows = ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'];
 
     public static function init():bool {
-        $threadHold = strtoupper(Conf::getEnv('LOG_LEVEL', 'INFO'));
+        $threshold = strtoupper(Conf::getEnv('LOG_LEVEL', 'INFO'));
 
-        static::$allows = array_slice(static::$allows, array_search($threadHold, static::$allows));
+        static::$allows = array_slice(static::$allows, array_search($threshold, static::$allows));
 
         return LoggerManager::init();
     }
@@ -48,7 +48,7 @@ class Log {
     private static function checkLevel(string $level):bool {
         return in_array($level, static::$allows);
     }
-    private static function getModuleName() {
+    private static function getModuleName():string {
         return debug_backtrace()[2]['class'];
     }
 }
@@ -71,7 +71,7 @@ class LoggerManager {
 
         return true;
     }
-    public static function get($name) {
+    public static function get($name):Logger {
         if (!isset(self::$container[$name])) {
             self::$container[$name] = new Logger($name, self::$stdout, self::$stderr);
         }
@@ -79,6 +79,6 @@ class LoggerManager {
         return self::$container[$name];
     }
     private static function redirectStream() {
-
+        // todo
     }
 }

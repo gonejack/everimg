@@ -7,7 +7,7 @@
  */
 
 class Net {
-    public static function parseHeaders(?array $originHeaders, $headerName = null) {
+    public static function parseHeaders(?array $originHeaders, string $headerName = null) {
         $parsedHeaders = [];
 
         if (!empty($originHeaders)) {
