@@ -185,16 +185,21 @@ class ActInput {
         $tryTimes = 3;
         while ($tryTimes-- > 0) {
             $binary = @file_get_contents($src, false, $context) ?: "";
-            $expectLen = intval(Net::parseHeaders(@$http_response_header, 'content-length'));
-            $realLen = strlen($binary);
-
-            if ($realLen == $expectLen) {
-                return $binary;
+            $status = Net::parseHeaders(@$http_response_header, 'status');
+            if (strpos($status, '4', 0) === 0) {
+                Log::warn("Failed with code %s", $status);
+                break;
             }
             else {
-                Log::warn("Retry download [%s]", $src);
-
-                sleep(10);
+                $realLen = strlen($binary);
+                $expectLen = intval(Net::parseHeaders(@$http_response_header, 'content-length'));
+                if ($realLen > 0 && $realLen == $expectLen) {
+                    return $binary;
+                }
+                else {
+                    Log::warn("Retry download [%s]", $src);
+                    sleep(10);
+                }
             }
         }
 
