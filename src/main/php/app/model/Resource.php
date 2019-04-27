@@ -21,7 +21,7 @@ class Resource extends \Evernote\Model\Resource {
             unset($attrs['height']);
         }
 
-        if ($attrs['alt']) {
+        if (isset($attrs['alt'])) {
             $attrs['alt'] = htmlspecialchars($attrs['alt']);
         }
 
