@@ -23,14 +23,14 @@ class Net {
                     $parsedHeaders[strtolower(@$header[0])] = @$header[1];
                 }
             }
-
-            // get interests
-            if (!is_null($headerName)) {
-                $headerName = strtolower($headerName);
-                return isset($parsedHeaders[$headerName]) ? $parsedHeaders[$headerName] : null;
-            }
         }
 
-        return $parsedHeaders;
+        if (empty($headerName)) {
+            return $parsedHeaders;
+        }
+        else {
+            $headerName = strtolower($headerName);
+            return isset($parsedHeaders[$headerName]) ? $parsedHeaders[$headerName] : null;
+        }
     }
 }
