@@ -186,7 +186,7 @@ class ActInput {
         while ($tryTimes-- > 0) {
             $binary = @file_get_contents($src, false, $context) ?: "";
             $status = Net::parseHeaders(@$http_response_header, 'status');
-            if (strpos($status, '4', 0) === 0) {
+            if (!empty($status) && strpos($status, '4', 0) === 0) {
                 Log::warn("Failed with code %s", $status);
                 break;
             }
