@@ -23,6 +23,6 @@ class Resource extends \Evernote\Model\Resource {
 
         unset($attrs['src']);
 
-        return sprintf($tag, implode(" ", array_map(function($k, $v) {$v = htmlspecialchars($v); return "$k=\"$v\"";}, array_keys($attrs), $attrs)));
+        return sprintf($tag, implode(" ", array_map(function($k, $v) {$v = htmlspecialchars(strval($v)); return "$k=\"$v\"";}, array_keys($attrs), $attrs)));
     }
 }
