@@ -79,6 +79,6 @@ class LoggerManager {
         return self::$container[$name];
     }
     private static function redirectStream() {
-        // todo
+        // 不需要重定向至文件
     }
 }

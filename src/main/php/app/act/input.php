@@ -173,6 +173,7 @@ class ActInput {
         Log::debug("Download image [%s]", $src);
 
         $context = stream_context_create([
+            'timeout' => 300,
             "http" => [
                 "method" => "GET",
                 "header" => [
@@ -211,6 +212,7 @@ class ActInput {
         // tumblr
         if (strpos($src, '.media.tumblr.com/') !== false && strpos($src, '500.') !== false) {
             $context = stream_context_create([
+                'timeout' => 300,
                 "http" => [
                     "method" => "HEAD",
                     "header" => [
