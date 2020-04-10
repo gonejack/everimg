@@ -5,4 +5,8 @@ date_default_timezone_set('Asia/Shanghai');
 
 require 'vendor/autoload.php';
 
-App::start();
+function main() {
+    App::start();
+}
+
+main();

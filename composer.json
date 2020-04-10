@@ -1,18 +1,18 @@
 {
-  "autoload": {
-    "classmap": [
-      "src"
+    "autoload": {
+        "classmap": [
+            "src"
+        ]
+    },
+    "require": {
+        "ext-json": "*",
+        "evernote/evernote-cloud-sdk-php": "dev-master",
+        "ext-dom": "*",
+        "ext-pcntl": "*"
+    },
+    "require-dev": {
+    },
+    "bin": [
+        "index.php"
     ]
-  },
-  "require": {
-    "ext-json": "*",
-    "evernote/evernote-cloud-sdk-php": "dev-master",
-    "ext-dom": "*",
-    "ext-pcntl": "*"
-  },
-  "require-dev": {
-  },
-  "bin": [
-    "index.php"
-  ]
 }
