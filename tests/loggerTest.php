@@ -6,6 +6,7 @@
  * Time: 3:07 PM
  */
 
+use Everimg\Lib\Logger;
 use PHPUnit\Framework\TestCase;
 
 class LoggerTest extends TestCase {

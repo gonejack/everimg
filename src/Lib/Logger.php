@@ -8,6 +8,8 @@
 
 declare(strict_types=1);
 
+namespace Everimg\Lib;
+
 class Logger {
     private $name;
     private $out;

@@ -8,6 +8,8 @@
 
 declare(strict_types=1);
 
+namespace Everimg\Model;
+
 class Resource extends \Evernote\Model\Resource {
     public function getEnmlImageTag(array $attrs) {
         $tag = '<en-media %s />';

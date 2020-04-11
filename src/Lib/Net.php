@@ -6,6 +6,8 @@
  * Time: 10:42 AM
  */
 
+namespace Everimg\Lib;
+
 class Net {
     public static function parseHeaders(?array $originHeaders, string $headerName = null) {
         $parsedHeaders = [];

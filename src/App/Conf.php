@@ -8,15 +8,16 @@
 
 declare(strict_types=1);
 
-class ENV_DEFAULT {
-    static $CONF_FILE = './conf/release.ini';
-}
+namespace Everimg\App;
+
+use Exception;
+use Phar;
 
 class Conf {
     private static $conf;
 
     public static function init() {
-        $file = self::getEnv('CONF_FILE', ENV_DEFAULT::$CONF_FILE);
+        $file = self::getEnv('CONF_FILE', './conf/release.ini');
 
         if (file_exists($file)) {
             Conf::$conf = parse_ini_file($file);

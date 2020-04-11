@@ -6,6 +6,7 @@
  * Time: 3:52 AM
  */
 
+use Everimg\App\Conf;
 use PHPUnit\Framework\TestCase;
 
 class ConfTest extends TestCase {
