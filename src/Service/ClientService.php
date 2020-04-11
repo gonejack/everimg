@@ -26,7 +26,6 @@ use Evernote\File\File;
 use Evernote\Model\EnmlNoteContent;
 use Evernote\Model\Note;
 use Exception;
-use Thrift\Exception\TException;
 use Thrift\Exception\TTransportException;
 
 class ClientService implements Service {
@@ -37,8 +36,8 @@ class ClientService implements Service {
 
     private static $sina = [];
 
-    public static $lastUpdateCountFile;
-    public static $lastUpdateTimeFile;
+    private static $lastUpdateCountFile;
+    private static $lastUpdateTimeFile;
 
     private static $noteFilter;
     private static $noteMetaSpec;
@@ -83,7 +82,6 @@ class ClientService implements Service {
 
         return true;
     }
-
     public static function start(): void {
         while (true) {
             static::modify();
@@ -92,7 +90,7 @@ class ClientService implements Service {
         }
     }
 
-    public static function modify() {
+    private static function modify() {
         Log::info("Start [%s]", __METHOD__);
 
         try {
@@ -117,8 +115,7 @@ class ClientService implements Service {
 
         Log::info("End [%s]", __METHOD__);
     }
-
-    public static function uploadModifiedNote(Note $note) {
+    private static function uploadModifiedNote(Note $note) {
         $tryTimes = 3;
 
         while ($tryTimes-- > 0) {
@@ -148,7 +145,7 @@ class ClientService implements Service {
         Log::error("Upload failed with note [%s]", $note->getTitle());
     }
 
-    public static function getUpdatedNoteMetas(): array {
+    private static function getUpdatedNoteMetas(): array {
         Log::info("Checking update");
 
         try {
@@ -190,37 +187,14 @@ class ClientService implements Service {
 
         return $metas;
     }
-
-    private static function parseImageAttrs(DOMElement $img): array {
-        $keys = [
-            'src',
-            'align',
-            'alt',
-            'longdesc',
-            'height',
-            'width',
-            'border',
-            'hspace',
-            'vspace',
-            'usemap',
-            'style',
-            'title',
-            'lang',
-            'xml:lang',
-            'dir',
-        ];
-        $values = [];
-
-        foreach ($keys as $attr) {
-            if (!empty($val = $img->getAttribute($attr))) {
-                $values[$attr] = $val;
-            }
-        }
-
-        return $values;
+    private static function saveLastUpdateCount(int $count) {
+        return file_put_contents(self::$lastUpdateCountFile, strval($count));
+    }
+    private static function saveLastUpdateTime(float $now) {
+        return file_put_contents(self::$lastUpdateTimeFile, strval(floor($now)));
     }
 
-    public static function modifyNote(Note $note): ?Note {
+    private static function modifyNote(Note $note): ?Note {
         $noteTitle = $note->getTitle();
         $noteContent = $note->getContent()->toEnml();
         $htmlParser = new DOMDocument();
@@ -295,7 +269,34 @@ class ClientService implements Service {
 
         return $changes > 0 ? $note : null;
     }
+    private static function parseImageAttrs(DOMElement $img): array {
+        $keys = [
+            'src',
+            'align',
+            'alt',
+            'longdesc',
+            'height',
+            'width',
+            'border',
+            'hspace',
+            'vspace',
+            'usemap',
+            'style',
+            'title',
+            'lang',
+            'xml:lang',
+            'dir',
+        ];
+        $values = [];
 
+        foreach ($keys as $attr) {
+            if (!empty($val = $img->getAttribute($attr))) {
+                $values[$attr] = $val;
+            }
+        }
+
+        return $values;
+    }
     private static function newEmojiHTML($macro, $src): string {
         $macro = str_replace('[', '', $macro);
         $macro = str_replace(']', '', $macro);
@@ -303,7 +304,7 @@ class ClientService implements Service {
         return "<img src=\"$src\" alt=\"$macro\" />";
     }
 
-    public static function getNoteFromMeta(NoteMetadata $meta): ?Note {
+    private static function getNoteFromMeta(NoteMetadata $meta): ?Note {
         try {
             Log::debug("Fetch note [%s]", $meta->title);
 
@@ -318,8 +319,7 @@ class ClientService implements Service {
             return null;
         }
     }
-
-    public static function getMediaResource(string $src): ?\Everimg\Model\Resource {
+    private static function getMediaResource(string $src): ?\Everimg\Model\Resource {
         $resource = null;
 
         $better = static::getBetterImageURL($src);
@@ -351,8 +351,7 @@ class ClientService implements Service {
 
         return $resource;
     }
-
-    public static function getSinaBase64Emoji(string $macro): ?string {
+    private static function getSinaBase64Emoji(string $macro): ?string {
         if (empty(static::$sina)) {
             $json = Conf::getResourceContent("sina_emojis.json");
 
@@ -368,22 +367,12 @@ class ClientService implements Service {
         return isset(static::$sina[$macro]) ? static::$sina[$macro] : null;
     }
 
-    private static function saveLastUpdateCount(int $count) {
-        return file_put_contents(self::$lastUpdateCountFile, strval($count));
-    }
-
-    private static function saveLastUpdateTime(float $now) {
-        return file_put_contents(self::$lastUpdateTimeFile, strval(floor($now)));
-    }
-
     private static function getLastUpdateTime(): float {
         return floor(floatval(@file_get_contents(self::$lastUpdateTimeFile)) ?: time() * 1e3);
     }
-
     private static function getLastUpdateCount(): int {
         return intval(@file_get_contents(self::$lastUpdateCountFile));
     }
-
     private static function getImage(string $src) {
         Log::debug("Download image [%s]", $src);
 
@@ -421,7 +410,6 @@ class ClientService implements Service {
 
         return null;
     }
-
     private static function getBetterImageURL($src): string {
         // tumblr
         if (strpos($src, '.media.tumblr.com/') !== false && strpos($src, '500.') !== false) {

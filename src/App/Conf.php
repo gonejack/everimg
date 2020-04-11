@@ -56,9 +56,9 @@ class Conf {
         return $val;
     }
     public static function getResourceContent(string $filename):?string {
-        $dir = Phar::running() ?: realpath(__DIR__.'/../../../../../');
+        $dir = Phar::running() ?: getcwd();
 
-        return @file_get_contents("$dir/src/main/res/$filename") ?: "";
+        return @file_get_contents("$dir/res/$filename") ?: "";
     }
 }
 
