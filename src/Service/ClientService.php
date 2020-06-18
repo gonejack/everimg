@@ -32,6 +32,10 @@ class ClientService implements Service {
     private static $token;
     private static $sandbox;
     private static $china;
+
+    /**
+     * @var Client
+     */
     private static $client;
 
     private static $sina = [];
@@ -82,6 +86,7 @@ class ClientService implements Service {
 
         return true;
     }
+
     public static function start(): void {
         while (true) {
             static::modify();
@@ -115,6 +120,7 @@ class ClientService implements Service {
 
         Log::info("End [%s]", __METHOD__);
     }
+
     private static function uploadModifiedNote(Note $note) {
         $tryTimes = 3;
 
@@ -154,8 +160,8 @@ class ClientService implements Service {
             $noteStore = static::$client->getUserNotestore();
             $syncState = $noteStore->getSyncState(static::$client->getToken());
 
-            $lastUpdateCount = self::getLastUpdateCount();
-            $lastUpdateTime = self::getLastUpdateTime();
+            $lastUpdateCount = static::getLastUpdateCount();
+            $lastUpdateTime = static::getLastUpdateTime();
 
             Log::debug("SyncState updateCount: %s, lastUpdateCount: %s",
                 $syncState->updateCount,
@@ -166,10 +172,10 @@ class ClientService implements Service {
                 date('Y-m-d H:i:s', intval($lastUpdateTime / 1e3))
             );
             if ($syncState->updateCount > $lastUpdateCount) {
-                self::saveLastUpdateCount($syncState->updateCount);
-                self::saveLastUpdateTime(time() * 1e3);
+                static::saveLastUpdateCount($syncState->updateCount);
+                static::saveLastUpdateTime(time() * 1e3);
 
-                $metaData = $noteStore->findNotesMetadata(static::$client->getToken(), self::$noteFilter, 0, 120, self::$noteMetaSpec);
+                $metaData = $noteStore->findNotesMetadata(static::$client->getToken(), static::$noteFilter, 0, 120, static::$noteMetaSpec);
 
                 foreach ($metaData->notes as $meta) {
                     if ($meta->updated > $lastUpdateTime) {
@@ -187,11 +193,13 @@ class ClientService implements Service {
 
         return $metas;
     }
+
     private static function saveLastUpdateCount(int $count) {
-        return file_put_contents(self::$lastUpdateCountFile, strval($count));
+        return file_put_contents(static::$lastUpdateCountFile, strval($count));
     }
+
     private static function saveLastUpdateTime(float $now) {
-        return file_put_contents(self::$lastUpdateTimeFile, strval(floor($now)));
+        return file_put_contents(static::$lastUpdateTimeFile, strval(floor($now)));
     }
 
     private static function modifyNote(Note $note): ?Note {
@@ -221,7 +229,7 @@ class ClientService implements Service {
                 $htmlParser->loadHTML($fixedTag);
 
                 foreach ($htmlParser->getElementsByTagName('img') as $imgNode) {
-                    $imgAttrs = self::parseImageAttrs($imgNode);
+                    $imgAttrs = static::parseImageAttrs($imgNode);
 
                     $src = $imgAttrs['src'];
                     if (empty($src)) { // invalid media source
@@ -269,6 +277,7 @@ class ClientService implements Service {
 
         return $changes > 0 ? $note : null;
     }
+
     private static function parseImageAttrs(DOMElement $img): array {
         $keys = [
             'src',
@@ -297,6 +306,7 @@ class ClientService implements Service {
 
         return $values;
     }
+
     private static function newEmojiHTML($macro, $src): string {
         $macro = str_replace('[', '', $macro);
         $macro = str_replace(']', '', $macro);
@@ -319,6 +329,7 @@ class ClientService implements Service {
             return null;
         }
     }
+
     private static function getMediaResource(string $src): ?\Everimg\Model\Resource {
         $resource = null;
 
@@ -351,6 +362,7 @@ class ClientService implements Service {
 
         return $resource;
     }
+
     private static function getSinaBase64Emoji(string $macro): ?string {
         if (empty(static::$sina)) {
             $json = Conf::getResourceContent("sina_emojis.json");
@@ -368,11 +380,13 @@ class ClientService implements Service {
     }
 
     private static function getLastUpdateTime(): float {
-        return floor(floatval(@file_get_contents(self::$lastUpdateTimeFile)) ?: time() * 1e3);
+        return floor(floatval(@file_get_contents(static::$lastUpdateTimeFile)) ?: time() * 1e3);
     }
+
     private static function getLastUpdateCount(): int {
-        return intval(@file_get_contents(self::$lastUpdateCountFile));
+        return intval(@file_get_contents(static::$lastUpdateCountFile));
     }
+
     private static function getImage(string $src) {
         Log::debug("Download image [%s]", $src);
 
@@ -410,6 +424,7 @@ class ClientService implements Service {
 
         return null;
     }
+
     private static function getBetterImageURL($src): string {
         // tumblr
         if (strpos($src, '.media.tumblr.com/') !== false && strpos($src, '500.') !== false) {

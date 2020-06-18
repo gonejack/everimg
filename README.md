@@ -11,7 +11,7 @@ cd everimg
 
 
 # get composer (dependencies manage tool)
-wget https://getcomposer.org/composer.phar
+wget -O composer.phar https://getcomposer.org/composer-stable.phar
 
 
 # install dependencies
@@ -61,7 +61,7 @@ php ./phpunit.phar --configuration ./phpunit.xml
 ##### Packaging
 
 ```
-wget https://github.com/clue/phar-composer/releases/download/v1.0.0/phar-composer.phar
+wget -O phar-composer.phar https://github.com/clue/phar-composer/releases/download/v1.1.0/phar-composer-1.1.0.phar
 php -d phar.readonly=off ./phar-composer.phar build . ./bin/everimg.phar
 ```
 
