@@ -1,7 +1,7 @@
 # everimg
 
 [![Build Status](https://travis-ci.org/gonejack/everimg.svg?branch=master)](https://travis-ci.org/gonejack/everimg)
-
+[![GitHub license](https://img.shields.io/github/license/gonejack/everimg.svg?color=blue)](LICENSE)
 
 ### Preparing
 
