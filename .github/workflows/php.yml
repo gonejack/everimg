@@ -8,30 +8,31 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate
-      
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-    - name: Install dependencies
-      if: steps.composer-cache.outputs.cache-hit != 'true'
-      run: composer install --prefer-dist --no-progress --no-suggest
+      - name: install dependencies
+        run:
+          - curl -sSfL -o composer.phar https://getcomposer.org/composer-stable.phar
+          - curl -sSfL -o phar-composer.phar https://github.com/clue/phar-composer/releases/download/v1.1.0/phar-composer-1.1.0.phar
+          - curl -sSfL -o phpunit.phar https://phar.phpunit.de/phpunit-7.4.3.phar
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
+      - name: before script
+        run:
+          - php composer.phar install
+          - php composer.phar dump-autoload
 
-#     - name: Run test suite
-#       run: composer run-script test
+      - name: test and build
+        run:
+          - php phpunit.phar --configuration ./phpunit.xml
+          - php -d phar.readonly=off ./phar-composer.phar build . ./bin/everimg.phar
