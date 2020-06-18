@@ -1,5 +1,6 @@
 # everimg
 
+[![Build Status](https://travis-ci.org/gonejack/everimg.svg?branch=master)](https://travis-ci.org/gonejack/everimg)
 
 
 ### Preparing
@@ -11,7 +12,7 @@ cd everimg
 
 
 # get composer (dependencies manage tool)
-wget https://getcomposer.org/composer.phar
+wget -O composer.phar https://getcomposer.org/composer-stable.phar
 
 
 # install dependencies
@@ -49,7 +50,7 @@ php ./index.php
 ##### Test
 
 ```
-wget https://phar.phpunit.de/phpunit-7.4.3.phar -o ./phpunit.phar
+wget -O phpunit.phar https://phar.phpunit.de/phpunit-7.4.3.phar
 
 php ./phpunit.phar --configuration ./phpunit.xml
 ```
@@ -61,7 +62,7 @@ php ./phpunit.phar --configuration ./phpunit.xml
 ##### Packaging
 
 ```
-wget https://github.com/clue/phar-composer/releases/download/v1.0.0/phar-composer.phar
+wget -O phar-composer.phar https://github.com/clue/phar-composer/releases/download/v1.1.0/phar-composer-1.1.0.phar
 php -d phar.readonly=off ./phar-composer.phar build . ./bin/everimg.phar
 ```
 
