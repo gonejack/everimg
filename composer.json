@@ -15,5 +15,17 @@
     },
     "bin": [
         "index.php"
-    ]
+    ],
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://mirrors.aliyun.com/composer/"
+        }
+    },
+    "config": {
+        "platform": {
+            "ext-pcntl": "7.3",
+            "ext-posix": "7.3"
+        }
+    }
 }
