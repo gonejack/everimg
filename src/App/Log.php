@@ -19,11 +19,11 @@ class Log {
     private static $allows = ['DEBUG', 'INFO', 'WARN', 'ERROR', 'FATAL'];
 
     public static function init(): bool {
-        $threshold = strtoupper(Conf::getEnv('LOG_LEVEL', 'INFO'));
+        $threshold = strtoupper(Config::getEnv('LOG_LEVEL', 'INFO'));
 
         static::$allows = array_slice(static::$allows, array_search($threshold, static::$allows));
 
-        if (Conf::getEnv("LOG_TO_FILE", false)) {
+        if (Config::getEnv("LOG_TO_FILE", false)) {
             static::redirectStream();
         } else {
             self::$stdout = STDOUT;

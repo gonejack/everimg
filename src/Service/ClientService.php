@@ -16,7 +16,7 @@ use EDAM\NoteStore\NoteFilter;
 use EDAM\NoteStore\NoteMetadata;
 use EDAM\NoteStore\NotesMetadataResultSpec;
 use EDAM\Types\NoteSortOrder;
-use Everimg\App\Conf;
+use Everimg\App\Config;
 use Everimg\App\Log;
 use Everimg\App\Service;
 use Everimg\Lib\Net;
@@ -55,17 +55,17 @@ class ClientService implements Service {
     ];
 
     public static function init(): bool {
-        static::$token = Conf::mustGet('client.token');
-        static::$sandbox = Conf::getBool('client.sandbox', true);
-        static::$china = Conf::getBool('client.china', false);
+        static::$token = Config::mustGet('client.token');
+        static::$sandbox = Config::getBool('client.sandbox', true);
+        static::$china = Config::getBool('client.china', false);
         static::$client = new Client(static:: $token, static:: $sandbox, null, null, static:: $china);
 
         static::$imagePattern = /** @lang regexp */
             '#<img [^<>]*?src="[^"]+"[^<>]*?>([^<>]*?</img>)?#';
         static::$emojiPattern = '#\[[^<>]+?\]#';
 
-        static::$lastUpdateCountFile = Conf::get('deploy.file.last_update_count', './var/last_update_count');
-        static::$lastUpdateTimeFile = Conf::get('deploy.file.last_update_time', './var/last_update_time');
+        static::$lastUpdateCountFile = Config::get('deploy.file.last_update_count', './var/last_update_count');
+        static::$lastUpdateTimeFile = Config::get('deploy.file.last_update_time', './var/last_update_time');
 
         static::$noteFilter = new NoteFilter([
             'order' => NoteSortOrder::UPDATED,
@@ -91,7 +91,7 @@ class ClientService implements Service {
         while (true) {
             static::modify();
 
-            sleep(60 * Conf::getInt('update.interval.minutes', 20));
+            sleep(60 * Config::getInt('update.interval.minutes', 20));
         }
     }
 
@@ -365,7 +365,7 @@ class ClientService implements Service {
 
     private static function getSinaBase64Emoji(string $macro): ?string {
         if (empty(static::$sina)) {
-            $json = Conf::getResourceContent("sina_emojis.json");
+            $json = Config::getResourceContent("sina_emojis.json");
 
             if ($json) {
                 static::$sina = json_decode($json, true);
@@ -419,6 +419,7 @@ class ClientService implements Service {
                 }
             }
         }
+
 
         Log::error("Failed download [%s]", $src);
 

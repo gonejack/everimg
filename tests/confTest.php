@@ -6,15 +6,15 @@
  * Time: 3:52 AM
  */
 
-use Everimg\App\Conf;
+use Everimg\App\Config;
 use PHPUnit\Framework\TestCase;
 
 class ConfTest extends TestCase {
     public function testGet() {
-        Conf::init();
+        Config::init();
 
 //        $this->assertEquals(2, Conf::mustGet("mus"));
-        $this->assertEquals('./conf/dev.ini', Conf::getEnv("CONF_FILE", ""));
+        $this->assertEquals('./conf/dev.ini', Config::getEnv("CONF_FILE", ""));
 
         $this->expectException('PHPUnit\Framework\Error\Warning');
         $abc = 0;

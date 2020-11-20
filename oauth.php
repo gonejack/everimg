@@ -8,15 +8,15 @@
 
 require 'vendor/autoload.php';
 
-use Everimg\App\Conf;
+use Everimg\App\Config;
 
 $sandbox = false;
 $china = false;
 
 $oauth_handler = new \Evernote\Auth\OauthHandler($sandbox, false, $china);
 
-$key = Conf::get('consumer.key');
-$secret = Conf::get('consumer.secret');
+$key = Config::get('consumer.key');
+$secret = Config::get('consumer.secret');
 $callback = 'http://localhost:1234/oauth.php';
 
 try {

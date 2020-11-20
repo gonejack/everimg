@@ -19,7 +19,7 @@ class App {
     }
 
     private static function init() {
-        Conf::init();
+        Config::init();
         Log::init();
 
         foreach (static::$services as $service) {

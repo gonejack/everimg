@@ -13,14 +13,14 @@ namespace Everimg\App;
 use Exception;
 use Phar;
 
-class Conf {
+class Config {
     private static $conf;
 
     public static function init() {
         $file = self::getEnv('CONF_FILE', './conf/release.ini');
 
         if (file_exists($file)) {
-            Conf::$conf = parse_ini_file($file);
+            Config::$conf = parse_ini_file($file);
         }
         else {
             Log::fatal("Config file [%s] not exist", $file);
