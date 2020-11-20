@@ -4,7 +4,7 @@ php:
   - '7.3'
 
 install:
-  - curl -sSfL -o composer.phar https://getcomposer.org/composer-stable.phar
+  - curl -sSfL -o composer.phar https://getcomposer.org/download/1.10.17/composer.phar
   - curl -sSfL -o phar-composer.phar https://github.com/clue/phar-composer/releases/download/v1.1.0/phar-composer-1.1.0.phar
   - curl -sSfL -o phpunit.phar https://phar.phpunit.de/phpunit-7.4.3.phar
 
