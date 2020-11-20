@@ -22,7 +22,7 @@ jobs:
             ${{ runner.os }}-php-
 
       - name: download composer.phar
-        run: curl -sSfL -o composer.phar https://getcomposer.org/composer-stable.phar
+        run: curl -sSfL -o composer.phar https://getcomposer.org/download/1.10.17/composer.phar
 
       - name: download phar-composer.phar
         run: curl -sSfL -o phar-composer.phar https://github.com/clue/phar-composer/releases/download/v1.1.0/phar-composer-1.1.0.phar
