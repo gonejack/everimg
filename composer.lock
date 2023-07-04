@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0266bccea88661eda69be5f89afb2588",
+    "content-hash": "ecd529899b3f96fa3e6137c85c8af467",
     "packages": [
         {
             "name": "evernote/evernote-cloud-sdk-php",
-            "version": "dev-master",
+            "version": "2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/evernote/evernote-cloud-sdk-php.git",
-                "reference": "b9e83d40cfd09cf25846a80fe521f4ba151c2e1b"
+                "reference": "c24d691b5ed94ecdf68e738b5dc103b9f2a00022"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/evernote/evernote-cloud-sdk-php/zipball/b9e83d40cfd09cf25846a80fe521f4ba151c2e1b",
-                "reference": "b9e83d40cfd09cf25846a80fe521f4ba151c2e1b",
+                "url": "https://api.github.com/repos/evernote/evernote-cloud-sdk-php/zipball/c24d691b5ed94ecdf68e738b5dc103b9f2a00022",
+                "reference": "c24d691b5ed94ecdf68e738b5dc103b9f2a00022",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -35,8 +35,8 @@
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "Evernote": "src/",
-                    "Thrift": "src/"
+                    "Thrift": "src/",
+                    "Evernote": "src/"
                 },
                 "classmap": [
                     "src/EDAM"
@@ -61,7 +61,12 @@
                 "evernote",
                 "sdk"
             ],
-            "time": "2020-01-07T20:29:22+00:00"
+            "support": {
+                "forum": "https://discussion.evernote.com/forum/61-evernote-for-developers/",
+                "issues": "https://github.com/evernote/evernote-cloud-sdk-php/issues",
+                "source": "https://github.com/evernote/evernote-cloud-sdk-php/tree/master"
+            },
+            "time": "2017-05-02T17:38:37+00:00"
         },
         {
             "name": "ezyang/htmlpurifier",
@@ -304,9 +309,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "evernote/evernote-cloud-sdk-php": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
@@ -320,5 +323,5 @@
         "ext-pcntl": "7.3",
         "ext-posix": "7.3"
     },
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.3.0"
 }

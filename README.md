@@ -43,15 +43,13 @@ php ./composer.phar dump-autoload
 ##### Run
 
 ```
-export CONF_FILE=./conf/dev.ini
-
-php ./index.php
+CONF_FILE=./conf/dev.ini php ./index.php
 ```
 
 ##### Test
 
 ```
-wget -O phpunit.phar https://phar.phpunit.de/phpunit-7.4.3.phar
+wget -O phpunit.phar https://phar.phpunit.de/phpunit-10.2.3.phar
 
 php ./phpunit.phar --configuration ./phpunit.xml
 ```
@@ -63,11 +61,11 @@ php ./phpunit.phar --configuration ./phpunit.xml
 ##### Packaging
 
 ```
-wget -O phar-composer.phar https://github.com/clue/phar-composer/releases/download/v1.1.0/phar-composer-1.1.0.phar
+wget -O phar-composer.phar https://github.com/clue/phar-composer/releases/download/v1.4.0/phar-composer-1.4.0.phar
 php -d phar.readonly=off ./phar-composer.phar build . ./bin/everimg.phar
 ```
 
-##### Boot
+##### Startup
 
 ```
 env CONF_FILE=./conf/dev.ini ./bin/everimg.phar
@@ -79,9 +77,7 @@ env CONF_FILE=./conf/dev.ini ./bin/everimg.phar
 
 ##### Service management
 
-Supervisor is recommend for service management, take a look on ./deploy/supervisor.ini.
-
-
+Supervisor is recommended for service management, take a look on ./deploy/supervisor.ini.
 
 ### Cautions
 

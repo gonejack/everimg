@@ -12,12 +12,10 @@
     },
     "require": {
         "ext-json": "*",
-        "evernote/evernote-cloud-sdk-php": "dev-master",
+        "evernote/evernote-cloud-sdk-php": "^2.0",
         "ext-dom": "*",
         "ext-pcntl": "*",
         "ext-mbstring": "*"
-    },
-    "require-dev": {
     },
     "bin": [
         "index.php"
